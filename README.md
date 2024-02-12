@@ -15,8 +15,8 @@ Desenvolver um serviço para manipulação de dados e persistência de dados de 
 ## Desejável
 
 - [x] Execução direta no serviço da linguagem escolhida ou em SQL.
-- [] Integração contínua com Github Actions
-- [] Testes automatizados.
+- [ ] Integração contínua com Github Actions
+- [ ] Testes automatizados.
 
 ## Instruções de Execução Local
 1. Clone este repositório: `git clone github.com/lucasdanielgeo/customer-history-importer.git`
