@@ -13,3 +13,27 @@ type CustomerHistory struct {
 	LastPurchaseStore        *string
 	IsValidLastPurchaseStore bool
 }
+
+func NewCustomerHistory(
+	CPF string,
+	IsCPFValid bool,
+	Private, Incomplete *bool,
+	LastPurchaseDate *string,
+	AverageTicket, LastPurchaseTicket *float64,
+	MostFrequentStore, LastPurchaseStore *string,
+	IsValidMostFrequentStore, IsValidLastPurchaseStore bool,
+) CustomerHistory {
+	return CustomerHistory{
+		CPF:                      CPF,
+		IsCPFValid:               IsCPFValid,
+		Private:                  Private,
+		Incomplete:               Incomplete,
+		LastPurchaseDate:         LastPurchaseDate,
+		AverageTicket:            AverageTicket,
+		LastPurchaseTicket:       LastPurchaseTicket,
+		MostFrequentStore:        MostFrequentStore,
+		IsValidMostFrequentStore: IsValidMostFrequentStore,
+		LastPurchaseStore:        LastPurchaseStore,
+		IsValidLastPurchaseStore: IsValidLastPurchaseStore,
+	}
+}
