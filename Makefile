@@ -10,5 +10,5 @@ run-build:
 tests:
 	go test ./...
 
-tests-verbose:
+tests-v:
 	go test -v ./...
