@@ -10,7 +10,7 @@ func GetPostgresHost() string {
 }
 
 func GetPostgresDatabase() string {
-	return os.Getenv("POSTGRES_DATABASE")
+	return os.Getenv("POSTGRES_DB")
 }
 
 func GetPostgresUser() string {
