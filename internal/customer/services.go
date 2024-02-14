@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"regexp"
+
+	"github.com/lucasdanielgeo/customer-history-importer/internal/customer/validation"
 )
 
 type CustomerHistoryService interface {
@@ -56,9 +58,25 @@ func (s *customerHistoryServiceImpl) ReadLines() ([]CustomerHistory, error) {
 func (s *customerHistoryServiceImpl) parseCustomerFromFileFields(fields []string) CustomerHistory {
 	cpf := fields[0]
 
+	IsValidCPF := true
+	if err := validation.ValidateCPF(cpf); err != nil {
+		IsValidCPF = false
+	}
+
 	lastPurchaseDate := ParseNullString(fields[3])
+
 	mostFrequentStore := ParseNullString(fields[6])
+	isMostFrequentStoreValid := true
+	if mostFrequentStore == nil || validation.ValidateCNPJ(*mostFrequentStore) != nil {
+		isMostFrequentStoreValid = false
+
+	}
+
 	lastPurchaseStore := ParseNullString(fields[7])
+	islastPurchaseStoreValid := true
+	if lastPurchaseStore == nil || validation.ValidateCNPJ(*lastPurchaseStore) != nil {
+		islastPurchaseStoreValid = false
+	}
 
 	private, err := ParseBool(fields[1])
 	if err != nil {
@@ -80,7 +98,11 @@ func (s *customerHistoryServiceImpl) parseCustomerFromFileFields(fields []string
 		lastPurchaseTicket = nil
 	}
 
-	customer := NewCustomerHistory(cpf, false, private, incomplete, lastPurchaseDate, averageTicket, lastPurchaseTicket, mostFrequentStore, lastPurchaseStore, false, false)
+	customer := NewCustomerHistory(
+		cpf, IsValidCPF, private, incomplete, lastPurchaseDate,
+		averageTicket, lastPurchaseTicket, mostFrequentStore,
+		lastPurchaseStore, isMostFrequentStoreValid, islastPurchaseStoreValid,
+	)
 
 	return customer
 }
