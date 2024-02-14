@@ -18,7 +18,7 @@ func (r CustomerHistoryDBRepository) SaveBatch(customers []CustomerHistory) erro
         INSERT INTO customers_purchase_history (
             cpf, private, incomplete, last_purchase_date, average_ticket, 
             last_purchase_ticket, most_frequent_store, last_purchase_store,
-			is_cpf_valid, is_most_frequent_store_valid, is_last_purchase_store_valid
+			is_valid_cpf, is_most_frequent_store_valid, is_last_purchase_store_valid
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9 ,$10 ,$11)
     `
@@ -38,7 +38,7 @@ func (r CustomerHistoryDBRepository) SaveBatch(customers []CustomerHistory) erro
 		_, err = stmt.Exec(
 			c.CPF, c.Private, c.Incomplete, c.LastPurchaseDate, c.AverageTicket,
 			c.LastPurchaseTicket, c.MostFrequentStore, c.LastPurchaseStore,
-			c.IsCPFValid, c.IsValidMostFrequentStore, c.IsValidLastPurchaseStore,
+			c.IsValidCPF, c.IsValidMostFrequentStore, c.IsValidLastPurchaseStore,
 		)
 		if err != nil {
 			return fmt.Errorf("error executing SQL statement: %w", err)
