@@ -1,8 +1,8 @@
 run:
-	go run cmd/importer/main.go
+	go run -mod=mod cmd/importer/main.go
 
 build:
-	go build -o bin/importer cmd/importer/main.go
+	go build -mod=mod -o bin/importer cmd/importer/main.go
 
 run-build:
 	./bin/importer
