@@ -12,7 +12,6 @@ import (
 func InitDB() (*sql.DB, error) {
 	db, err := sql.Open("postgres", env.GetPostgresConnectionString())
 	if err != nil {
-		// %w?
 		return nil, fmt.Errorf("failed to open database connection: %w", err)
 	}
 
