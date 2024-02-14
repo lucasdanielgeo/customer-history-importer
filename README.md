@@ -19,6 +19,32 @@ Desenvolver um serviço para manipulação de dados e persistência de dados de 
 - [ ] Testes automatizados.
 
 ## Instruções de Execução Local
-1. Clone este repositório: `git clone github.com/lucasdanielgeo/customer-history-importer.git`
-2. Navegue até o diretório do projeto: `cd nome_do_projeto`
-3. Execute o Docker Compose: `docker-compose up`
+
+1. **Clone este repositório:**
+    ```bash
+    git clone https://github.com/lucasdanielgeo/customer-history-importer.git
+    ```
+2. Navegue até o diretório do projeto:
+
+    ```bash
+    cd customer-history-importer
+    ```
+3. Execute os seguintes comandos com Docker Compose:
+    ```bash
+    docker-compose build // apenas na primeira vez
+    docker-compose up
+    ```
+4. Para terminar os containers:
+    ```bash
+    docker-compose down
+    ```
+Estes comandos irão construir as imagens Docker e iniciar os contêineres conforme definido no arquivo `docker-compose.yml`.
+
+Uma vez que as imagens tenham sido construídas com sucesso, não será necessário executar novamente o comando `docker-compose build` nas próximas execuções.
+
+## Rodando os testes
+
+Para executar os testes, você pode usar alguns dos comandos disponíveis no Makefile:
+
+- `make tests`: Executa os testes normalmente.
+- `make tests-v`: Executa os testes no modo verbose, fornecendo mais informações sobre o processo de teste.
