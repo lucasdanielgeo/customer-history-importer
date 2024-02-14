@@ -2,7 +2,7 @@ package customer
 
 type CustomerHistory struct {
 	CPF                      string
-	IsCPFValid               bool
+	IsValidCPF               bool
 	Private                  *bool
 	Incomplete               *bool
 	LastPurchaseDate         *string
@@ -16,7 +16,7 @@ type CustomerHistory struct {
 
 func NewCustomerHistory(
 	CPF string,
-	IsCPFValid bool,
+	IsValidCPF bool,
 	Private, Incomplete *bool,
 	LastPurchaseDate *string,
 	AverageTicket, LastPurchaseTicket *float64,
@@ -25,7 +25,7 @@ func NewCustomerHistory(
 ) CustomerHistory {
 	return CustomerHistory{
 		CPF:                      CPF,
-		IsCPFValid:               IsCPFValid,
+		IsValidCPF:               IsValidCPF,
 		Private:                  Private,
 		Incomplete:               Incomplete,
 		LastPurchaseDate:         LastPurchaseDate,
