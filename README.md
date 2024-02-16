@@ -16,7 +16,7 @@ Desenvolver um serviço para manipulação de dados e persistência de dados de 
 
 - [x] Execução direta no serviço da linguagem escolhida ou em SQL.
 - [x] Integração contínua com Github Actions
-- [ ] Testes automatizados.
+- [x] Testes automatizados.
 
 ## Instruções de Execução Local
 
@@ -29,6 +29,10 @@ Desenvolver um serviço para manipulação de dados e persistência de dados de 
     ```bash
     cd customer-history-importer
     ```
+    **Certifique-se** de que o arquivo **.env** esteja configurado. Deixei um arquivo com os dados para o ambiente de desenvolvimento no repositório. 
+    
+    Caso queira configurar o seu para ambiente de produção, sugiro não descartar o atual.
+
 3. Execute os seguintes comandos com Docker Compose:
     ```bash
     docker-compose build // apenas na primeira vez
