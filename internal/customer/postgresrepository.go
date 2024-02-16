@@ -3,6 +3,7 @@ package customer
 import (
 	"database/sql"
 	"fmt"
+	"log"
 )
 
 type CustomerHistoryDBRepository struct {
@@ -34,8 +35,9 @@ func (r CustomerHistoryDBRepository) SaveBatch(customers []CustomerHistory) erro
 	}
 	defer stmt.Close()
 
+	var rowsInsertedCount int64
 	for _, c := range customers {
-		_, err = stmt.Exec(
+		result, err := stmt.Exec(
 			c.CPF, c.Private, c.Incomplete, c.LastPurchaseDate, c.AverageTicket,
 			c.LastPurchaseTicket, c.MostFrequentStore, c.LastPurchaseStore,
 			c.IsValidCPF, c.IsValidMostFrequentStore, c.IsValidLastPurchaseStore,
@@ -43,11 +45,19 @@ func (r CustomerHistoryDBRepository) SaveBatch(customers []CustomerHistory) erro
 		if err != nil {
 			return fmt.Errorf("error executing SQL statement: %w", err)
 		}
+
+		rows, err := result.RowsAffected()
+		if err != nil {
+			log.Printf("[ERROR] could not get rows affected: %v", err)
+		}
+		rowsInsertedCount += rows
 	}
 
 	if err = tx.Commit(); err != nil {
 		return fmt.Errorf("error committing tx: %w", err)
 	}
+
+	log.Printf("[INFO] Sucessfuly inserted %d rows", rowsInsertedCount)
 
 	return nil
 }
