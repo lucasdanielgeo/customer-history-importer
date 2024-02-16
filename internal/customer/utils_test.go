@@ -65,3 +65,25 @@ func TestParseFloat64(t *testing.T) {
 		})
 	}
 }
+
+func TestValidateSliceLength(t *testing.T) {
+	testCases := []struct {
+		name   string
+		input  []int
+		want   int
+		expect bool
+	}{
+		{"slice length is 1", []int{}, 1, false},
+		{"slice length is 2", []int{1, 1}, 2, true},
+		{"Empty slice", []int{1}, 0, false},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := ValidateSliceLength(tc.want, tc.input)
+			got := err == nil
+			if got != tc.expect {
+				t.Error(err)
+			}
+		})
+	}
+}

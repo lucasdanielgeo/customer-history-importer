@@ -37,3 +37,10 @@ func ParseFloat64(value string) (*float64, error) {
 
 	return &floatValue, nil
 }
+
+func ValidateSliceLength[T any](validLength int, fields []T) error {
+	if len(fields) != validLength {
+		return fmt.Errorf("unexpected length: got %d, expected 8", len(fields))
+	}
+	return nil
+}

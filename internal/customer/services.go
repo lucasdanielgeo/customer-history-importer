@@ -112,13 +112,13 @@ var splitExpression = regexp.MustCompile(`\s+|\s+\s`)
 func (s customerHistoryServiceImpl) parseFileLine(line string) ([]string, error) {
 	fields := splitExpression.Split(line, -1)
 
-	if len(fields) != 8 {
-		return nil, fmt.Errorf("unexpected number of fields: got %d, expected 8", len(fields))
+	if err := ValidateSliceLength(8, fields); err != nil {
+		return nil, err
 	}
 
 	return fields, nil
 }
 
-func ignoreFileHeader(scanner *bufio.Scanner) {
-	scanner.Scan()
+func (s customerHistoryServiceImpl) ignoreFileHeader() {
+	s.scanner.Scan()
 }
