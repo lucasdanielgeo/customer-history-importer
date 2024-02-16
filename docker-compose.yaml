@@ -8,7 +8,7 @@ services:
     ports:
       - "5432:5432"
     env_file:
-      - path: .env
+      - path: ./.env
         required: true
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
@@ -25,7 +25,7 @@ services:
       db:
         condition: service_healthy
     env_file:
-      - path: .env
+      - path: ./.env
         required: true
     environment:
       POSTGRES_HOST: importer-postgres:5432
