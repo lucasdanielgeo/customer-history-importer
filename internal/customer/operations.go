@@ -1,11 +1,10 @@
 package customer
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"log"
-
-	"github.com/lucasdanielgeo/customer-history-importer/internal/infra/localfs"
 )
 
 type CustomerHistoryImporter struct {
@@ -16,7 +15,7 @@ type CustomerHistoryImporter struct {
 func (c CustomerHistoryImporter) Execute() {
 	log.Println("[INFO] Connected to PostgreSQL database")
 
-	fileScanner := localfs.NewScanner(c.Reader)
+	fileScanner := bufio.NewScanner(c.Reader)
 
 	customerService := NewCustomerService(c.Repository, fileScanner)
 
