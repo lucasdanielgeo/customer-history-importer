@@ -61,7 +61,7 @@ func (s *customerHistoryServiceImpl) parseCustomerFromFileFields(fields []string
 
 	IsValidCPF, err := validation.ValidateCPF(cpf)
 	if err != nil {
-		log.Println(err)
+		log.Printf("[INFO] cpf with value %v is not valid, validation cause %v", cpf, err)
 	}
 
 	lastPurchaseDate := ParseNullString(fields[3])
@@ -73,14 +73,14 @@ func (s *customerHistoryServiceImpl) parseCustomerFromFileFields(fields []string
 
 	isMostFrequentStoreValid, err := validation.ValidateCNPJ(mostFrequentStore)
 	if err != nil {
-		log.Println(err)
+		log.Printf("[INFO] mostFrequentStore with value %v is not valid, validation cause %v", mostFrequentStore, err)
 	}
 
 	lastPurchaseStore := ParseNullString(fields[7])
 
 	isLastPurchaseStoreValid, err := validation.ValidateCNPJ(lastPurchaseStore)
 	if err != nil {
-		log.Println(err)
+		log.Printf("[INFO] lastPurchaseStore with value %v is not valid, validation cause %v", lastPurchaseStore, err)
 	}
 	if lastPurchaseStore != nil {
 		lastPurchaseStore = validation.SanitizeNullableIdentifier(lastPurchaseStore)
