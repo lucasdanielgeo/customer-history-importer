@@ -2,7 +2,6 @@ package customer
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"log"
 )
@@ -22,15 +21,15 @@ func (c CustomerHistoryImporter) Execute() {
 	log.Println("[INFO] Reading file")
 	customers, err := customerService.ReadLines()
 	if err != nil {
-		panic(err)
+		log.Fatalf("[ERROR] Could not read file content: %v", err)
 	}
 
 	log.Println("[INFO] Saving on DB")
 	if err := customerService.SaveOnDB(customers); err != nil {
-		panic(err)
+		log.Fatalf("[ERROR] Could not persist data on db: %v", err)
 	}
 
 	if err := fileScanner.Err(); err != nil {
-		fmt.Println("error reading the file:", err)
+		log.Fatalf("[INFO] error reading the file: %v", err)
 	}
 }
