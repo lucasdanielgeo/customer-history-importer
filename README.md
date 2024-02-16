@@ -52,3 +52,4 @@ Para executar os testes, você pode usar alguns dos comandos disponíveis no Mak
 
 - `make tests`: Executa os testes normalmente.
 - `make tests-v`: Executa os testes no modo verbose, fornecendo mais informações sobre o processo de teste.
+- `make tests-c`: Executa testes, avalia cobertura de testes gerando um relatório html.
