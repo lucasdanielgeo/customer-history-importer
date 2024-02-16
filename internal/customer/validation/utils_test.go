@@ -61,8 +61,14 @@ func TestRemoveNonNumericCharacters(t *testing.T) {
 		name, input, expected string
 	}{
 		{"Alphanumeric string with numbers", "12a34b56", "123456"},
-		{"Empty input", "", ""},
-		{"Alphanumeric string without numbers", "abc123def", "123"},
+		{"Alphanumeric string", "abc123def", "123"},
+		{"String with special characters", "12#45@78", "124578"},
+		{"String with spaces", "1 2 3 4 5", "12345"},
+		{"String with Unicode characters", "٤٥٦", ""},
+		{"Chinese numbers", "一二三四五六", ""},
+		{"Japanese numbers", "一二三四五六", ""},
+		{"Hindi numbers", "१२३४५६", ""},
+		{"Thai numbers", "๑๒๓๔๕๖", ""},
 	}
 
 	for _, tc := range testCases {
@@ -88,7 +94,7 @@ func TestSanitizeIdentifier(t *testing.T) {
 
 	for _, tc := range testeCases {
 		t.Run(tc.name, func(t *testing.T) {
-			got := sanitizeIdentifier(tc.input)
+			got := SanitizeIdentifier(tc.input)
 			if got != tc.expected {
 				t.Errorf(defaultErrorMessage, got, tc.expected)
 			}

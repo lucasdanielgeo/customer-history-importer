@@ -17,10 +17,9 @@ func TestValidateCPF(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			validationErr := ValidateCPF(tc.input)
-			got := validationErr == nil
-			if got != tc.expected {
-				t.Errorf("%v for input %s", validationErr, tc.input)
+			isValid, err := ValidateCPF(tc.input)
+			if isValid != tc.expected {
+				t.Errorf("%v for input %s", err, tc.input)
 			}
 		})
 	}

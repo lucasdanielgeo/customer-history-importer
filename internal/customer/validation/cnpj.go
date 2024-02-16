@@ -6,26 +6,36 @@ import (
 	"strings"
 )
 
-func ValidateCNPJ(cnpj string) error {
-	sanitizedValue := sanitizeIdentifier(cnpj)
-	if err := validateLength(14, sanitizedValue); err != nil {
-		return err
-	}
-	if err := validateAllDigitsNotEqual(sanitizedValue); err != nil {
-		return err
-	}
-	if err := validateFirstVerificationCodeCNPJ(sanitizedValue); err != nil {
-		return err
-	}
-	if err := validateSecondVerificationCodeCNPJ(sanitizedValue); err != nil {
-		return err
+func ValidateCNPJ(cnpj *string) (bool, error) {
+	if cnpj == nil {
+		return false, nil
 	}
 
-	return nil
+	sanitizeIdentifier := SanitizeIdentifier(*cnpj)
+
+	if err := validateLength(14, sanitizeIdentifier); err != nil {
+		return false, err
+	}
+	if err := validateAllDigitsNotEqual(sanitizeIdentifier); err != nil {
+		return false, err
+	}
+	if err := validateFirstVerificationCodeCNPJ(sanitizeIdentifier); err != nil {
+		return false, err
+	}
+	if err := validateSecondVerificationCodeCNPJ(sanitizeIdentifier); err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 func validateFirstVerificationCodeCNPJ(cnpj string) error {
 	cnpjDigits := strings.Split(cnpj, "")
+
+	firstvalidationCode, err := strconv.Atoi(cnpjDigits[12])
+	if err != nil {
+		return fmt.Errorf("could not parse first validation code, err: %w", err)
+	}
 	multiplyer := 5
 	sum := 0
 	for _, digit := range cnpjDigits[:12] {
@@ -48,11 +58,6 @@ func validateFirstVerificationCodeCNPJ(cnpj string) error {
 		calculation = 11 - calculation
 	}
 
-	firstvalidationCode, err := strconv.Atoi(cnpjDigits[12])
-	if err != nil {
-		return fmt.Errorf("could not parse first validation code, err: %w", err)
-	}
-
 	if calculation != firstvalidationCode {
 		return fmt.Errorf("first validation code is not valid, it should be %d, but got %d", calculation, firstvalidationCode)
 	}
@@ -62,6 +67,10 @@ func validateFirstVerificationCodeCNPJ(cnpj string) error {
 
 func validateSecondVerificationCodeCNPJ(cnpj string) error {
 	cnpjDigits := strings.Split(cnpj, "")
+	secondValidatiorCode, err := strconv.Atoi(cnpjDigits[13])
+	if err != nil {
+		return fmt.Errorf("could not parse second validation code, err: %w", err)
+	}
 
 	multiplyer := 6
 	sum := 0
@@ -83,12 +92,6 @@ func validateSecondVerificationCodeCNPJ(cnpj string) error {
 	}
 	if calculation >= 2 {
 		calculation = 11 - calculation
-	}
-
-	secondValidatiorCode, err := strconv.Atoi(cnpjDigits[13])
-
-	if err != nil {
-		return fmt.Errorf("could not parse second validation code, err: %w", err)
 	}
 
 	if calculation != secondValidatiorCode {

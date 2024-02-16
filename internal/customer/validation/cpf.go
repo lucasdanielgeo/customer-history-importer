@@ -6,27 +6,33 @@ import (
 	"strings"
 )
 
-func ValidateCPF(cpf string) error {
-	sanitizedValue := sanitizeIdentifier(cpf)
+func ValidateCPF(cpf string) (bool, error) {
+	sanitizedValue := SanitizeIdentifier(cpf)
 
 	if err := validateLength(11, sanitizedValue); err != nil {
-		return err
+		return false, err
 	}
 	if err := validateAllDigitsNotEqual(sanitizedValue); err != nil {
-		return err
+		return false, err
 	}
 	if err := validateFirstVerificationCodeCPF(sanitizedValue); err != nil {
-		return err
+		return false, err
 	}
 	if err := validateSecondVerificationCode(sanitizedValue); err != nil {
-		return err
+		return false, err
 	}
 
-	return nil
+	return true, nil
 }
 
 func validateFirstVerificationCodeCPF(cpf string) error {
 	cpfDigits := strings.Split(cpf, "")
+
+	firstvalidationCode, err := strconv.Atoi(cpfDigits[9])
+	if err != nil {
+		return fmt.Errorf("could not parse first validation code, err: %w", err)
+	}
+
 	multiplyer := 10
 	sum := 0
 	for _, digit := range cpfDigits[:9] {
@@ -43,11 +49,6 @@ func validateFirstVerificationCodeCPF(cpf string) error {
 		calculation = 0
 	}
 
-	firstvalidationCode, err := strconv.Atoi(cpfDigits[9])
-	if err != nil {
-		return fmt.Errorf("could not parse first validation code, err: %w", err)
-	}
-
 	if calculation != firstvalidationCode {
 		return fmt.Errorf("first validation code is not valid, it should be %d, but got %d", calculation, firstvalidationCode)
 	}
@@ -57,6 +58,11 @@ func validateFirstVerificationCodeCPF(cpf string) error {
 
 func validateSecondVerificationCode(cpf string) error {
 	cpfDigits := strings.Split(cpf, "")
+	secondValidatiorCode, err := strconv.Atoi(cpfDigits[10])
+	if err != nil {
+		return fmt.Errorf("could not parse first validation code, err: %w", err)
+	}
+
 	multiplyer := 11
 	sum := 0
 	for _, digit := range cpfDigits[:10] {
@@ -71,11 +77,6 @@ func validateSecondVerificationCode(cpf string) error {
 	calculation := (sum * 10) % 11
 	if calculation == 10 {
 		calculation = 0
-	}
-
-	secondValidatiorCode, err := strconv.Atoi(cpfDigits[10])
-	if err != nil {
-		return fmt.Errorf("could not parse first validation code, err: %w", err)
 	}
 
 	if calculation != secondValidatiorCode {

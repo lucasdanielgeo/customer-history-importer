@@ -17,10 +17,9 @@ func TestValidateCNPJ(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			validationErr := ValidateCNPJ(tc.input)
-			got := validationErr == nil
-			if got != tc.expected {
-				t.Errorf("%v for input %s", validationErr, tc.input)
+			isValid, err := ValidateCNPJ(&tc.input)
+			if isValid != tc.expected {
+				t.Errorf("%v for input %s", err, tc.input)
 			}
 		})
 	}
@@ -33,7 +32,7 @@ func TestValidateFirstVerificationCodeCNPJ(t *testing.T) {
 	}{
 		{"valid first verification code random numbers", "12345678900188", true},
 		{"valid first with 0 as first validation code", "59118609000102", true},
-		{"invalid input string with non-numeric characters", "abcdefghijkl", false},
+		{"invalid input string with non-numeric characters", "abcdefghijklmn", false},
 	}
 
 	for _, tc := range testCases {
@@ -54,7 +53,7 @@ func TestValidateSecondVerificationCodeCNPJ(t *testing.T) {
 	}{
 		{"valid second verification code sequence of 9 numbers", "12345678900188", true},
 		{"invalid second verification code", "44349680000108", false},
-		{"invalid input string with non-numeric characters", "abcdefghijklj", false},
+		{"invalid input string with non-numeric characters", "abcdefghijklmn", false},
 	}
 
 	for _, tc := range testCases {

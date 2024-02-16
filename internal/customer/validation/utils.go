@@ -16,16 +16,24 @@ func removeNonNumericCharacters(value string) string {
 	return nonNumericRegex.ReplaceAllString(value, "")
 }
 
-func sanitizeIdentifier(identifier string) string {
+func SanitizeIdentifier(identifier string) string {
 	identifier = removeStringSpaces(identifier)
 	identifier = removeNonNumericCharacters(identifier)
 
 	return identifier
 }
 
-func validateLength(validLenght int, identifier string) error {
-	if len(identifier) != validLenght {
-		return fmt.Errorf("CPF should have 11 characters, but got %d", len(identifier))
+func SanitizeNullableIdentifier(nullableIdentifier *string) *string {
+	identifier := *nullableIdentifier
+	identifier = removeStringSpaces(identifier)
+	identifier = removeNonNumericCharacters(identifier)
+
+	return &identifier
+}
+
+func validateLength(validLength int, identifier string) error {
+	if len(identifier) != validLength {
+		return fmt.Errorf("identifier should have %d characters, but got %d", validLength, len(identifier))
 	}
 
 	return nil
@@ -37,5 +45,5 @@ func validateAllDigitsNotEqual(identifier string) error {
 			return nil
 		}
 	}
-	return fmt.Errorf("invallid identifier, all digits are equal: %v", identifier)
+	return fmt.Errorf("invalid identifier, all digits are equal: %v", identifier)
 }

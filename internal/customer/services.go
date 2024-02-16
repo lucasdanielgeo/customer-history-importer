@@ -3,6 +3,7 @@ package customer
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"regexp"
 
 	"github.com/lucasdanielgeo/customer-history-importer/internal/customer/validation"
@@ -34,7 +35,7 @@ func (s customerHistoryServiceImpl) SaveOnDB(customers []CustomerHistory) error 
 }
 
 func (s *customerHistoryServiceImpl) ReadLines() ([]CustomerHistory, error) {
-	ignoreFileHeader(s.scanner)
+	s.ignoreFileHeader()
 	var customers []CustomerHistory
 	for s.scanner.Scan() {
 		line := s.scanner.Text()
@@ -56,26 +57,33 @@ func (s *customerHistoryServiceImpl) ReadLines() ([]CustomerHistory, error) {
 }
 
 func (s *customerHistoryServiceImpl) parseCustomerFromFileFields(fields []string) CustomerHistory {
-	cpf := fields[0]
+	cpf := validation.SanitizeIdentifier(fields[0])
 
-	IsValidCPF := true
-	if err := validation.ValidateCPF(cpf); err != nil {
-		IsValidCPF = false
+	IsValidCPF, err := validation.ValidateCPF(cpf)
+	if err != nil {
+		log.Println(err)
 	}
 
 	lastPurchaseDate := ParseNullString(fields[3])
 
 	mostFrequentStore := ParseNullString(fields[6])
-	isMostFrequentStoreValid := true
-	if mostFrequentStore == nil || validation.ValidateCNPJ(*mostFrequentStore) != nil {
-		isMostFrequentStoreValid = false
+	if mostFrequentStore != nil {
+		mostFrequentStore = validation.SanitizeNullableIdentifier(mostFrequentStore)
+	}
 
+	isMostFrequentStoreValid, err := validation.ValidateCNPJ(mostFrequentStore)
+	if err != nil {
+		log.Println(err)
 	}
 
 	lastPurchaseStore := ParseNullString(fields[7])
-	islastPurchaseStoreValid := true
-	if lastPurchaseStore == nil || validation.ValidateCNPJ(*lastPurchaseStore) != nil {
-		islastPurchaseStoreValid = false
+
+	isLastPurchaseStoreValid, err := validation.ValidateCNPJ(lastPurchaseStore)
+	if err != nil {
+		log.Println(err)
+	}
+	if lastPurchaseStore != nil {
+		lastPurchaseStore = validation.SanitizeNullableIdentifier(lastPurchaseStore)
 	}
 
 	private, err := ParseBool(fields[1])
@@ -101,7 +109,7 @@ func (s *customerHistoryServiceImpl) parseCustomerFromFileFields(fields []string
 	customer := NewCustomerHistory(
 		cpf, IsValidCPF, private, incomplete, lastPurchaseDate,
 		averageTicket, lastPurchaseTicket, mostFrequentStore,
-		lastPurchaseStore, isMostFrequentStoreValid, islastPurchaseStoreValid,
+		lastPurchaseStore, isMostFrequentStoreValid, isLastPurchaseStoreValid,
 	)
 
 	return customer
