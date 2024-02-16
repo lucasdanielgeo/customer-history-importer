@@ -15,7 +15,7 @@ Desenvolver um serviço para manipulação de dados e persistência de dados de 
 ## Desejável
 
 - [x] Execução direta no serviço da linguagem escolhida ou em SQL.
-- [x] Integração contínua com Github Actions
+- [x] Integração contínua com [GitHub Actions](https://github.com/lucasdanielgeo/customer-history-importer/actions)
 - [x] Testes automatizados.
 
 ## Instruções de Execução Local
